@@ -7,11 +7,12 @@ import os
 import django
 
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'avto.settings')
 django.setup()
 
 from bot.models import Answers, Message, Send_schedule, User
-
+from av_by.models import Car
 env = Env()
 env.read_env()
 
@@ -69,10 +70,24 @@ def First(day_from, day_to, month_from, month_to, year_from, year_to=2024):
 
     print(f'Дата первого сообщения {first}')
     print(f'Дата последнего сообщения {last}')
+def newcar():
+    car = Car.objects.all()
+    users = User.objects.all()
+    for i in car:
+        if i.data_create.date() == datetime.datetime.now().date():
+            if i.data_create.time().hour==datetime.datetime.now().time().hour and i.data_create.time().minute >= datetime.datetime.now().time().minute -1:
 
+                for user in users:
+                    bot.send_message(user.User_id, f''' Добавлена новая машина!
+                    {i.mark_car} {i.model_car}
+                    {i.year} года
+                    Цена {i.price}р
+                    Продавец {i.user.name}
+                    Телефон +375{i.user.phone}''')
 def schedule_jobs():
     sends = Send_schedule.objects.all()
-    schedule.every(10).seconds.do(AnswerBot)
+    schedule.every(3).seconds.do(AnswerBot)
+    schedule.every(1).minute.do(newcar)
     for send in sends:
         if send.Period == 'sec':
             schedule.every(send.Quanty).seconds.do(Send, id=send.id)
@@ -86,11 +101,13 @@ def schedule_jobs():
             else: Quanty = str(send.Quanty)
             schedule.every().day.at(f'{Quanty}:00', 'Europe/Moscow').do(Send, id=send.id)
 
+
 schedule_jobs()
 
-
+newcar()
 First(1, 5, 3, 3, 2024)
 
 while True:
     schedule.run_pending()
     time.sleep(5)
+

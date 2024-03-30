@@ -42,9 +42,9 @@ class Car(models.Model):
     color = models.CharField(max_length=20, null=True, blank=True, verbose_name='Цвет')
     condition = models.CharField(max_length=20, null=True, verbose_name='Состояние')
     description = models.TextField(null=True, verbose_name='Описание')
-    exchange = models.CharField(max_length=40, null=True, verbose_name='Обмен')
+    exchange = models.CharField(max_length=40, null=True, blank=True, verbose_name='Обмен')
     options = models.TextField(null=True, blank=True, verbose_name='Опции')
-    city_id = models.ForeignKey(City, on_delete=models.CASCADE, default=4, verbose_name='Город')
+    city_id = models.ForeignKey(City, default=4, on_delete=models.CASCADE, verbose_name='Город')
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, verbose_name='Владелец')
 
     class Meta:

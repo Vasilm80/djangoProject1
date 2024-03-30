@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bot.models import User, Message, Answers, Send_schedule
+from bot.models import User, Message, Answers, Send_schedule, NewCar
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -24,3 +24,8 @@ class Send_scheduleAdmin(admin.ModelAdmin):
     list_display = ('id', 'Period', 'Quanty', 'Text', 'All', 'User')
 
 admin.site.register(Send_schedule, Send_scheduleAdmin)
+
+class NewCarAdmin(admin.ModelAdmin):
+    list_display = ('id', 'mark', 'price', 'user')
+
+admin.site.register(NewCar, NewCarAdmin)

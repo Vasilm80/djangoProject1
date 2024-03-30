@@ -53,3 +53,11 @@ class Send_schedule(models.Model):
         verbose_name_plural = 'Рассылки'
 
 
+class NewCar(models.Model):
+    mark = models.CharField(max_length=30, verbose_name='Модель машины', null=True, blank=True)
+    price = models.PositiveIntegerField(verbose_name='Цена', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+
+    class Meta():
+        verbose_name = 'Новые машины'
+        verbose_name_plural = 'Новые машины'
